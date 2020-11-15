@@ -75,5 +75,24 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         return 1
     }
     
+    //Functions for the buttons, when pressed
+    @IBAction func buttonTappedBancroft(_ sender: Any) {
+        //Perform an action
+        view.backgroundColor = UIColor.green
+    }
+    
+    
+    @IBAction func buttonTappedCafe(_ sender: Any) {
+        view.backgroundColor = UIColor.gray
+    }
+    
+    @IBAction func buttonTappedLibrary(_ sender: Any) {
+        view.backgroundColor = UIColor.red
+    }
+    
+    
+    @IBAction func buttonTappedShop(_ sender: Any) {
+        view.backgroundColor = UIColor.blue
+    }
 }
 
