@@ -21,6 +21,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
 
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.contentInset = UIEdgeInsets(top: -40, left: 0, bottom: 0, right: 0)
         
         
     }
@@ -63,9 +64,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellReuseIdentifier")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellReuseIdentifier", for: indexPath) as UITableViewCell
         
-        let text = locations[0]
+        let text = locations[indexPath.row]
         cell.textLabel?.text = text
         
         return cell
