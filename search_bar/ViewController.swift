@@ -25,7 +25,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         
         
     }
+    
+    // Search Bar Functions
     private var locations = ["Queens Building", "ITL Building", "Library", "Octagon"]
+    private var selectedLoc = ""
     
     //MARK: Actions
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -34,6 +37,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         return true
     }
     
+    // Deals with user input, should recognise whether their inputs are valid or not
     func textFieldDidEndEditing(_ textField: UITextField) {
         let searchedLocation = textField
         
@@ -49,6 +53,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         
     }
     
+    // Checks to see if location exists within locations array
     func checkLocationExists(_ searchedLocation: UITextField) -> Bool{
         for location in locations{
             if searchedLocation.text?.lowercased() == location.lowercased(){
@@ -74,6 +79,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+    
+    // Stores selected location - from tableView - within selectedLoc variable
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        let selectedCell = self.tableView.cellForRow(at: indexPath as IndexPath)
+        selectedLoc = (selectedCell?.textLabel?.text)!
+        searchBarLocation.text = selectedLoc
+        
     }
     
     //Functions for the buttons, when pressed
