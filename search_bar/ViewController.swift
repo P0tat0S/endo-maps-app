@@ -17,17 +17,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         searchBarLocation.delegate = self
-        
-
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.contentInset = UIEdgeInsets(top: -40, left: 0, bottom: 0, right: 0)
+        searchBarLocation.addTarget(self, action: #selector(ViewController.textFieldDidChange(_:)),
+                                  for: .editingChanged)
+        //tableView.delegate = self
+        //tableView.dataSource = self
+        //tableView.contentInset = UIEdgeInsets(top: -40, left: 0, bottom: 0, right: 0)
         
         
     }
     
     // Search Bar Functions
     private var locations = ["Queens Building", "ITL Building", "Library", "Octagon"]
+    private var results = ["Queens Building", "ITL Building", "Library", "Octagon"]
     private var selectedLoc = ""
     
     //MARK: Actions
@@ -37,19 +38,64 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         return true
     }
     
-    // Deals with user input, should recognise whether their inputs are valid or not
+    // Deals with user fully inputting a locations name instead of click the corresponding cell in tableView
     func textFieldDidEndEditing(_ textField: UITextField) {
         let searchedLocation = textField
         
         if checkLocationExists(searchedLocation){
-            testLoc.text = searchedLocation.text
+            searchBarLocation.text = searchedLocation.text
         }
         else{
-            testLoc.text = "Sorry, I could not find that location."
+            searchBarLocation.text = "Sorry, I could not find that location."
                 
         }
         
         testLoc.sizeToFit()
+        
+    }
+    
+    // Checks the firt letter inputted by user, checks upon array list to see if any locations start with that letter. It then auto-completes and displays that location within a tableView
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        let inputSoFar = textField.text!
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.contentInset = UIEdgeInsets(top: -40, left: 0, bottom: 0, right: 0)
+        
+        
+        if(inputSoFar == ""){
+            results = [""]
+            self.tableView.reloadData()
+            return
+        }
+        
+        if(inputSoFar[inputSoFar.startIndex].lowercased() == "q")
+        {
+            results = [locations[0]]
+            self.tableView.reloadData()
+        }
+        
+        else if(inputSoFar[inputSoFar.startIndex].lowercased() == "i")
+        {
+            results = [locations[1]]
+            self.tableView.reloadData()
+        }
+        
+        else if(inputSoFar[inputSoFar.startIndex].lowercased() == "l")
+        {
+            results = [locations[2]]
+            self.tableView.reloadData()
+        }
+        else if(inputSoFar[inputSoFar.startIndex].lowercased() == "o")
+        {
+            results = [locations[3]]
+            self.tableView.reloadData()
+            
+        }
+        else{
+            results = ["Does Not Exist"]
+            self.tableView.reloadData()
+            
+        }
         
     }
     
@@ -64,19 +110,23 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         return false
     }
     
+    
+    // Table View
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locations.count;
+        return results.count;
     }
     
+    // Populates the tableView with data - cells.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellReuseIdentifier", for: indexPath) as UITableViewCell
         
-        let text = locations[indexPath.row]
+        let text = results[indexPath.row]
         cell.textLabel?.text = text
         
         return cell
     }
     
+    // Each cell will only have one section
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -88,6 +138,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         searchBarLocation.text = selectedLoc
         
     }
+    
+    
     
     //Functions for the buttons, when pressed
     @IBAction func buttonTappedBancroft(_ sender: Any) {
